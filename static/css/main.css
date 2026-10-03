@@ -607,3 +607,165 @@ img{display:block;max-width:100%;height:auto}button,input,select,textarea{font:i
   width: 40px; height: 4px; background: var(--border-hi);
   border-radius: 2px; margin: 12px auto 4px;
 }
+
+/* ==================================================================
+   CASINO PAGE — Premium redesign
+   ================================================================== */
+
+/* ── Nav bar ── */
+.casino-nav { display:flex; gap:var(--s2); padding:var(--s3) var(--s6); border-bottom:1px solid var(--border); background:var(--bg-base); overflow-x:auto; scrollbar-width:none; position:sticky; top:var(--nav-h); z-index:50; }
+.casino-nav::-webkit-scrollbar { display:none; }
+.casino-nav-item { display:inline-flex; align-items:center; gap:6px; padding:var(--s2) var(--s4); border-radius:var(--r-pill); font-size:var(--t-sm); font-weight:600; white-space:nowrap; color:var(--text-secondary); border:1px solid transparent; transition:color 120ms, background 120ms, border-color 120ms; text-decoration:none; }
+.casino-nav-item:hover { color:var(--text-primary); background:var(--bg-card); border-color:var(--border); }
+.casino-nav-item.active { color:var(--text-primary); background:var(--bg-card); border-color:var(--border-md); }
+.casino-nav-item--search { color:var(--text-muted); }
+.casino-nav-item__icon { font-size:.9rem; }
+
+/* ── Hero ── */
+.casino-hero { position:relative; background:linear-gradient(135deg, #08090d 0%, #110820 45%, #08090d 100%); overflow:hidden; min-height:360px; display:flex; align-items:center; border-bottom:1px solid var(--border); }
+.casino-hero__glow { position:absolute; border-radius:50%; pointer-events:none; filter:blur(60px); }
+.casino-hero__glow--1 { width:500px; height:500px; background:rgba(124,58,237,.15); top:-100px; right:10%; }
+.casino-hero__glow--2 { width:400px; height:400px; background:rgba(0,230,118,.06); bottom:-100px; left:5%; }
+.casino-hero__inner { position:relative; max-width:1440px; margin:0 auto; padding:var(--s12) var(--s8); display:grid; grid-template-columns:1fr auto; gap:var(--s10); align-items:center; width:100%; }
+@media(max-width:900px) { .casino-hero__inner { grid-template-columns:1fr; padding:var(--s8) var(--s5); } }
+.casino-hero__eyebrow { font-size:var(--t-xs); font-weight:800; text-transform:uppercase; letter-spacing:.14em; color:#b388ff; margin-bottom:var(--s3); }
+.casino-hero__title { font-size:clamp(2rem,4vw,3.2rem); font-weight:900; line-height:1.08; letter-spacing:-.03em; margin-bottom:var(--s4); color:var(--text-primary); }
+.casino-hero__title-accent { background:linear-gradient(135deg,#b388ff,#7c3aed,#4f46e5); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.casino-hero__sub { color:var(--text-secondary); font-size:var(--t-md); line-height:1.6; margin-bottom:var(--s6); max-width:460px; }
+.casino-hero__cta { display:flex; gap:var(--s3); flex-wrap:wrap; margin-bottom:var(--s6); }
+.casino-hero__trust { display:flex; gap:var(--s5); flex-wrap:wrap; }
+.casino-trust-item { display:flex; align-items:center; gap:6px; font-size:var(--t-xs); color:var(--text-muted); }
+.casino-trust-item span { font-size:.9rem; }
+.casino-hero__art svg { filter:drop-shadow(0 8px 32px rgba(124,58,237,.35)); }
+
+/* ── Stats strip ── */
+.casino-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:var(--r-xl); overflow:hidden; margin-bottom:var(--s10); }
+@media(max-width:640px) { .casino-stats { grid-template-columns:repeat(2,1fr); } }
+.casino-stat { background:var(--bg-card); padding:var(--s5) var(--s4); text-align:center; }
+.casino-stat__num { font-size:var(--t-2xl); font-weight:900; letter-spacing:-.02em; background:linear-gradient(135deg,var(--gold),#f59e0b); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:4px; }
+.casino-stat__label { font-size:var(--t-xs); color:var(--text-muted); text-transform:uppercase; letter-spacing:.08em; }
+
+/* ── Section ── */
+.casino-section { margin-bottom:var(--s12); }
+.casino-section-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:var(--s2); flex-shrink:0; }
+.casino-section-dot--gold { background:var(--gold); box-shadow:0 0 8px rgba(255,193,7,.5); }
+.casino-section-dot--blue { background:var(--blue); box-shadow:0 0 8px rgba(68,138,255,.5); }
+.casino-section-dot--red  { background:var(--red);  box-shadow:0 0 8px rgba(255,82,82,.5); }
+
+/* ── Game cards — upgraded ── */
+.games-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:var(--s4); }
+.games-grid--lg { grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); }
+@media(max-width:640px) { .games-grid { grid-template-columns:repeat(2,1fr); gap:var(--s3); } }
+
+.game-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r-xl); overflow:hidden; display:block; text-decoration:none; transition:transform 220ms var(--ease), border-color 220ms, box-shadow 220ms; }
+.game-card:hover { transform:translateY(-6px); border-color:rgba(124,58,237,.4); box-shadow:0 12px 40px rgba(0,0,0,.6), 0 0 0 1px rgba(124,58,237,.2); }
+.game-card--featured { border-color:rgba(255,193,7,.2); animation:gcard-glow 3s ease-in-out infinite; }
+@keyframes gcard-glow { 0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 20px 2px rgba(255,193,7,.2)} }
+.game-card--new { border-color:rgba(68,138,255,.25); }
+
+.game-card__thumb { position:relative; padding-top:70%; overflow:hidden; background:var(--bg-raised); }
+.game-card__img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform 400ms ease; }
+.game-card:hover .game-card__img { transform:scale(1.08); }
+
+.game-card__art { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+.game-card__art svg { width:100%; height:100%; transition:transform 400ms ease; }
+.game-card:hover .game-card__art svg { transform:scale(1.05); }
+.game-card__art-shimmer { position:relative; overflow:hidden; }
+.game-card__art-shimmer::after { content:""; position:absolute; inset:0; background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.08) 50%,transparent 60%); transform:translateX(-100%) skewX(-15deg); animation:card-shimmer 2.4s linear infinite; pointer-events:none; }
+@keyframes card-shimmer { to { transform:translateX(200%) skewX(-15deg); } }
+
+.game-card__badge { position:absolute; top:var(--s2); left:var(--s2); font-size:10px; font-weight:800; padding:3px 9px; border-radius:var(--r-pill); }
+.game-card__badge--new { background:var(--blue); color:#fff; }
+.game-card__badge--featured { background:linear-gradient(135deg,var(--gold),#f59e0b); color:#000; }
+
+.game-card__provider-badge { position:absolute; bottom:var(--s2); left:var(--s2); background:rgba(0,0,0,.7); color:rgba(255,255,255,.8); font-size:9px; font-weight:700; padding:2px 8px; border-radius:var(--r-sm); pointer-events:none; backdrop-filter:blur(4px); max-width:90px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.game-card__rtp-badge { position:absolute; bottom:var(--s2); right:var(--s2); background:rgba(0,0,0,.7); color:var(--gold); font-size:9px; font-weight:800; padding:2px 8px; border-radius:var(--r-sm); pointer-events:none; backdrop-filter:blur(4px); }
+
+.game-card__overlay { position:absolute; inset:0; background:rgba(0,0,0,.78); display:flex; align-items:center; justify-content:center; gap:var(--s3); opacity:0; transition:opacity 200ms; }
+.game-card:hover .game-card__overlay { opacity:1; }
+
+.game-card__info { padding:var(--s3) var(--s4) var(--s4); }
+.game-card__name { font-size:var(--t-sm); font-weight:700; color:var(--text-primary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-bottom:3px; }
+.game-card__provider { font-size:var(--t-xs); color:var(--text-muted); }
+
+/* ── Responsible Gambling bar ── */
+.casino-rg-bar { display:flex; align-items:center; gap:var(--s4); background:rgba(0,230,118,.04); border:1px solid rgba(0,230,118,.12); border-radius:var(--r-xl); padding:var(--s4) var(--s5); margin:var(--s8) 0 var(--s12); flex-wrap:wrap; }
+.casino-rg-bar__icons { display:flex; gap:var(--s2); font-size:1.1rem; flex-shrink:0; }
+.casino-rg-bar__text { font-size:var(--t-xs); color:var(--text-muted); flex:1; line-height:1.6; }
+.casino-rg-bar__text strong { color:var(--text-secondary); }
+.casino-rg-bar__text a { color:var(--green); }
+.casino-rg-bar__badge { background:linear-gradient(135deg,#dc2626,#7f1d1d); color:#fff; font-size:var(--t-xs); font-weight:900; padding:4px 10px; border-radius:var(--r-sm); flex-shrink:0; }
+
+@media(prefers-reduced-motion:reduce) {
+  .game-card__art-shimmer::after, .game-card--featured { animation:none!important; }
+  .game-card:hover, .game-card:hover .game-card__img, .game-card:hover .game-card__art svg { transform:none!important; }
+}
+
+/* CASINO NAV */
+.casino-nav{display:flex;gap:var(--s2);padding:var(--s3) var(--s6);border-bottom:1px solid var(--border);background:var(--bg-base);overflow-x:auto;scrollbar-width:none;position:sticky;top:var(--nav-h);z-index:50}
+.casino-nav::-webkit-scrollbar{display:none}
+.casino-nav-item{display:inline-flex;align-items:center;gap:6px;padding:var(--s2) var(--s4);border-radius:var(--r-pill);font-size:var(--t-sm);font-weight:600;white-space:nowrap;color:var(--text-secondary);border:1px solid transparent;transition:color 120ms,background 120ms,border-color 120ms;text-decoration:none}
+.casino-nav-item:hover{color:var(--text-primary);background:var(--bg-card);border-color:var(--border)}
+.casino-nav-item.active{color:var(--text-primary);background:var(--bg-card);border-color:var(--border-md)}
+/* CASINO HERO */
+.casino-hero{position:relative;background:linear-gradient(135deg,#08090d 0%,#110820 45%,#08090d 100%);overflow:hidden;min-height:360px;display:flex;align-items:center;border-bottom:1px solid var(--border)}
+.casino-hero__glow{position:absolute;border-radius:50%;pointer-events:none;filter:blur(60px)}
+.casino-hero__glow--1{width:500px;height:500px;background:rgba(124,58,237,.15);top:-100px;right:10%}
+.casino-hero__glow--2{width:400px;height:400px;background:rgba(0,230,118,.06);bottom:-100px;left:5%}
+.casino-hero__inner{position:relative;max-width:1440px;margin:0 auto;padding:var(--s12) var(--s8);display:grid;grid-template-columns:1fr auto;gap:var(--s10);align-items:center;width:100%}
+@media(max-width:900px){.casino-hero__inner{grid-template-columns:1fr;padding:var(--s8) var(--s5)}}
+.casino-hero__eyebrow{font-size:var(--t-xs);font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:#b388ff;margin-bottom:var(--s3)}
+.casino-hero__title{font-size:clamp(2rem,4vw,3.2rem);font-weight:900;line-height:1.08;letter-spacing:-.03em;margin-bottom:var(--s4);color:var(--text-primary)}
+.casino-hero__title-accent{background:linear-gradient(135deg,#b388ff,#7c3aed,#4f46e5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.casino-hero__sub{color:var(--text-secondary);font-size:var(--t-md);line-height:1.6;margin-bottom:var(--s6);max-width:460px}
+.casino-hero__cta{display:flex;gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s6)}
+.casino-hero__trust{display:flex;gap:var(--s5);flex-wrap:wrap}
+.casino-trust-item{display:flex;align-items:center;gap:6px;font-size:var(--t-xs);color:var(--text-muted)}
+/* STATS STRIP */
+.casino-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;margin-bottom:var(--s10)}
+@media(max-width:640px){.casino-stats{grid-template-columns:repeat(2,1fr)}}
+.casino-stat{background:var(--bg-card);padding:var(--s5) var(--s4);text-align:center}
+.casino-stat__num{font-size:var(--t-2xl);font-weight:900;letter-spacing:-.02em;background:linear-gradient(135deg,var(--gold),#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}
+.casino-stat__label{font-size:var(--t-xs);color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em}
+/* SECTION DOTS */
+.casino-section{margin-bottom:var(--s12)}
+.casino-section-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:var(--s2);flex-shrink:0}
+.casino-section-dot--gold{background:var(--gold);box-shadow:0 0 8px rgba(255,193,7,.5)}
+.casino-section-dot--blue{background:var(--blue);box-shadow:0 0 8px rgba(68,138,255,.5)}
+.casino-section-dot--red{background:var(--red);box-shadow:0 0 8px rgba(255,82,82,.5)}
+/* GAME CARDS UPGRADED */
+.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--s4)}
+.games-grid--lg{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+@media(max-width:640px){.games-grid{grid-template-columns:repeat(2,1fr);gap:var(--s3)}}
+.game-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;display:block;text-decoration:none;transition:transform 220ms var(--ease),border-color 220ms,box-shadow 220ms}
+.game-card:hover{transform:translateY(-6px);border-color:rgba(124,58,237,.4);box-shadow:0 12px 40px rgba(0,0,0,.6),0 0 0 1px rgba(124,58,237,.2)}
+.game-card--featured{border-color:rgba(255,193,7,.2);animation:gcard-glow 3s ease-in-out infinite}
+@keyframes gcard-glow{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 20px 2px rgba(255,193,7,.2)}}
+.game-card--new{border-color:rgba(68,138,255,.25)}
+.game-card__thumb{position:relative;padding-top:70%;overflow:hidden;background:var(--bg-raised)}
+.game-card__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 400ms ease}
+.game-card:hover .game-card__img{transform:scale(1.08)}
+.game-card__art{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.game-card__art svg{width:100%;height:100%;transition:transform 400ms ease}
+.game-card:hover .game-card__art svg{transform:scale(1.05)}
+.game-card__art-shimmer{position:relative;overflow:hidden}
+.game-card__art-shimmer::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.08) 50%,transparent 60%);transform:translateX(-100%) skewX(-15deg);animation:card-shimmer 2.4s linear infinite;pointer-events:none}
+@keyframes card-shimmer{to{transform:translateX(200%) skewX(-15deg)}}
+.game-card__badge{position:absolute;top:var(--s2);left:var(--s2);font-size:10px;font-weight:800;padding:3px 9px;border-radius:var(--r-pill)}
+.game-card__badge--new{background:var(--blue);color:#fff}
+.game-card__badge--featured{background:linear-gradient(135deg,var(--gold),#f59e0b);color:#000}
+.game-card__provider-badge{position:absolute;bottom:var(--s2);left:var(--s2);background:rgba(0,0,0,.72);color:rgba(255,255,255,.8);font-size:9px;font-weight:700;padding:2px 8px;border-radius:var(--r-sm);pointer-events:none;backdrop-filter:blur(4px);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.game-card__rtp-badge{position:absolute;bottom:var(--s2);right:var(--s2);background:rgba(0,0,0,.72);color:var(--gold);font-size:9px;font-weight:800;padding:2px 8px;border-radius:var(--r-sm);pointer-events:none;backdrop-filter:blur(4px)}
+.game-card__overlay{position:absolute;inset:0;background:rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center;gap:var(--s3);opacity:0;transition:opacity 200ms}
+.game-card:hover .game-card__overlay{opacity:1}
+.game-card__info{padding:var(--s3) var(--s4) var(--s4)}
+.game-card__name{font-size:var(--t-sm);font-weight:700;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:3px}
+.game-card__provider{font-size:var(--t-xs);color:var(--text-muted)}
+/* RG BAR */
+.casino-rg-bar{display:flex;align-items:center;gap:var(--s4);background:rgba(0,230,118,.04);border:1px solid rgba(0,230,118,.12);border-radius:var(--r-xl);padding:var(--s4) var(--s5);margin:var(--s8) 0 var(--s12);flex-wrap:wrap}
+.casino-rg-bar__icons{display:flex;gap:var(--s2);font-size:1.1rem;flex-shrink:0}
+.casino-rg-bar__text{font-size:var(--t-xs);color:var(--text-muted);flex:1;line-height:1.6}
+.casino-rg-bar__text strong{color:var(--text-secondary)}
+.casino-rg-bar__text a{color:var(--green)}
+.casino-rg-bar__badge{background:linear-gradient(135deg,#dc2626,#7f1d1d);color:#fff;font-size:var(--t-xs);font-weight:900;padding:4px 10px;border-radius:var(--r-sm);flex-shrink:0}
+@media(prefers-reduced-motion:reduce){.game-card__art-shimmer::after,.game-card--featured{animation:none!important}.game-card:hover{transform:none!important}}

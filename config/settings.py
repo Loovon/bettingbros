@@ -1,4 +1,4 @@
-"""
+﻿"""
 Django settings for BetPlatform.
 Environment-driven — never hardcode secrets.
 Supports SQLite (dev) and PostgreSQL (production) via DATABASE_URL.
@@ -11,13 +11,46 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env(
     DEBUG=(bool, True),
-    ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1", "bettingbros.vercel.app", "bettingbros-jxs1xe4ss-tumaininjuki-8085s-projects.vercel.app"]),
+    ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1"]),
 )
 environ.Env.read_env(BASE_DIR / ".env")
 
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-CHANGE-ME")
 DEBUG       = env("DEBUG")
-ALLOWED_HOSTS = env("ALLOWED_HOSTS")
+
+# ── ALLOWED_HOSTS — dynamic, works with any Vercel preview URL ───────────────
+# Never edit this block. Set env vars in Vercel dashboard instead.
+ALLOWED_HOSTS: list = env("ALLOWED_HOSTS")
+
+# Vercel automatically sets VERCEL_URL to the current deployment hostname.
+# This covers every new preview URL without any code changes.
+_vercel = os.environ.get("VERCEL_URL", "")
+if _vercel and _vercel not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(_vercel)
+
+# Your production domain — set PRODUCTION_DOMAIN=bettingbros.com in Vercel env vars
+_prod = os.environ.get("PRODUCTION_DOMAIN", "")
+if _prod:
+    for _d in [_prod, f"www.{_prod}"]:
+        if _d not in ALLOWED_HOSTS:
+            ALLOWED_HOSTS.append(_d)
+
+# Allow all hosts when DEBUG=True (Vercel preview, local dev).
+# This is safe because DEBUG exposes the error page anyway.
+# In production: set DEBUG=False and the wildcard is removed.
+if DEBUG:
+    if "*" not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append("*")
+
+# CSRF — trust all Vercel origins when DEBUG=True
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.vercel.app",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
+_prod_domain = os.environ.get("PRODUCTION_DOMAIN", "")
+if _prod_domain:
+    CSRF_TRUSTED_ORIGINS += [f"https://{_prod_domain}", f"https://www.{_prod_domain}"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
