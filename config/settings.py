@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env(
     DEBUG=(bool, True),
-    ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1", "bettingbros.vercel.app"]),
+    ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1", "bettingbros.vercel.app", "bettingbros-jxs1xe4ss-tumaininjuki-8085s-projects.vercel.app"]),
 )
 environ.Env.read_env(BASE_DIR / ".env")
 
