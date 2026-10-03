@@ -1,0 +1,10 @@
+{% extends "base/base.html" %}
+{% block title %}Bet Slip — BetPlatform{% endblock %}
+{% block content %}
+<div class="container" style="padding-top: var(--s8); max-width: 600px;">
+  <h1 style="font-size:var(--t-2xl); font-weight:800; margin-bottom:var(--s8);">Bet Slip</h1>
+  <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r-xl); overflow:hidden;">
+    {% include "components/bet_slip.html" %}
+  </div>
+</div>
+{% endblock %}

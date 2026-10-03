@@ -1,0 +1,60 @@
+﻿{% load static %}
+{% comment %}Event card component. Variables: event, show_score{% endcomment %}
+<article class="event-card {% if event.is_live %}event-card--live{% endif %}" data-event-id="{{ event.id }}">
+  <div class="event-card__header">
+    <span class="event-card__comp">{{ event.league.sport.name }} — {{ event.league.name }}</span>
+    {% if event.is_live %}
+      <span class="live-badge"><span class="live-dot"></span> LIVE{% if event.match_time %} {{ event.match_time }}'{% endif %}</span>
+    {% else %}
+      <span class="event-card__time">{{ event.starts_at|date:"D d M, H:i" }}</span>
+    {% endif %}
+  </div>
+  <div class="event-card__body">
+    <div class="event-card__team">
+      <span class="event-card__team-name">{{ event.home_team.name }}</span>
+    </div>
+    <div class="event-card__vs">
+      {% if show_score and event.is_live and event.home_score is not None %}
+        <span class="score-live">{{ event.home_score }} - {{ event.away_score }}</span>
+        {% if event.match_time %}<span class="score-time">{{ event.match_time }}'</span>{% endif %}
+      {% else %}
+        <span class="vs-label">VS</span>
+      {% endif %}
+    </div>
+    <div class="event-card__team event-card__team--away">
+      <span class="event-card__team-name">{{ event.away_team.name }}</span>
+    </div>
+  </div>
+  {% with main_market=event.markets.all|first %}
+    {% if main_market %}
+      <div class="odds-row {% if main_market.odds.all|length == 2 %}odds-row--2{% else %}odds-row--3{% endif %}">
+        {% for odd in main_market.odds.all %}
+          {% if odd.is_active %}
+            <button class="odd-btn {% if odd.status == 'suspended' %}suspended{% endif %}"
+              data-odd-id="{{ odd.id }}"
+              data-event-name="{{ event.home_team.name }} vs {{ event.away_team.name }}"
+              data-market-name="{{ main_market.name }}"
+              data-selection-name="{{ odd.name }}"
+              data-odds="{{ odd.decimal_odds }}"
+              aria-label="{{ odd.name }} {{ odd.decimal_odds }}"
+              {% if odd.status == 'suspended' %}disabled{% endif %}>
+              <span class="odd-btn__label">{{ odd.name }}</span>
+              <span class="odd-btn__price">{% if odd.status == 'suspended' %}🔒{% else %}{{ odd.decimal_odds }}{% endif %}</span>
+            </button>
+          {% endif %}
+        {% empty %}
+          <div style="grid-column:1/-1;text-align:center;padding:var(--s3);font-size:var(--t-xs);color:var(--text-muted);">Markets loading…</div>
+        {% endfor %}
+      </div>
+      {% with markets_count=event.markets.all|length %}
+        {% if markets_count > 1 %}
+          <div class="event-card__more">
+            <a href="{% url 'sportsbook:event_detail' event_id=event.id slug=event.slug %}">+{{ markets_count|add:"-1" }} more markets →</a>
+          </div>
+        {% endif %}
+      {% endwith %}
+    {% else %}
+      <div style="text-align:center;padding:var(--s3);font-size:var(--t-xs);color:var(--text-muted);">Markets not yet available</div>
+    {% endif %}
+  {% endwith %}
+</article>

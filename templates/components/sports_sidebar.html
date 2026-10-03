@@ -1,0 +1,27 @@
+{% load static %}
+<div class="sidebar-section">
+  <div class="sidebar-heading">Quick Access</div>
+  <a href="{% url 'sportsbook:live' %}" class="quick-filter quick-filter--live">
+    <span class="live-dot"></span> Live Now
+  </a>
+  <a href="{% url 'sportsbook:home' %}" class="quick-filter">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    Upcoming
+  </a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-heading">Sports</div>
+  {% for sport in sports %}
+    <a href="{% url 'sportsbook:sport_detail' sport_slug=sport.slug %}"
+       class="sport-item {% if current_sport and current_sport.id == sport.id %}active{% endif %}">
+      <span class="sport-item__icon">{{ sport.icon|default:"⚽" }}</span>
+      {{ sport.name }}
+    </a>
+  {% empty %}
+    <a href="#" class="sport-item"><span class="sport-item__icon">⚽</span> Football</a>
+    <a href="#" class="sport-item"><span class="sport-item__icon">🏀</span> Basketball</a>
+    <a href="#" class="sport-item"><span class="sport-item__icon">🎾</span> Tennis</a>
+    <a href="#" class="sport-item"><span class="sport-item__icon">🏏</span> Cricket</a>
+    <a href="#" class="sport-item"><span class="sport-item__icon">🎮</span> Esports</a>
+  {% endfor %}
+</div>

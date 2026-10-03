@@ -1,0 +1,73 @@
+{% extends "base/base.html" %}
+{% block title %}{{ game.name }} — Casino — BetPlatform{% endblock %}
+{% block content %}
+<div class="container" style="padding-top: var(--s8); max-width: 900px;">
+  <a href="{% url 'casino:home' %}" style="color:var(--text-muted); font-size:var(--t-sm); display:inline-flex; align-items:center; gap:.5rem; margin-bottom:var(--s6);">
+    ← Back to Casino
+  </a>
+
+  <div style="display:grid; grid-template-columns: 1fr 300px; gap: var(--s8); align-items:start;">
+    <div>
+      {% if game.image %}
+        <img src="{{ game.image.url }}" alt="{{ game.name }}"
+             style="width:100%; border-radius: var(--r-xl); margin-bottom: var(--s6);" />
+      {% endif %}
+      <h1 style="font-size: var(--t-2xl); font-weight:800; margin-bottom: var(--s2);">{{ game.name }}</h1>
+      <p style="color:var(--text-muted); margin-bottom:var(--s4);">{{ game.provider.name }} · {{ game.category.name }}</p>
+      {% if game.description %}
+        <p style="color:var(--text-muted); line-height:1.7; margin-bottom:var(--s6);">{{ game.description }}</p>
+      {% endif %}
+    </div>
+
+    <div style="background: var(--bg-card); border:1px solid var(--border); border-radius:var(--r-xl); padding: var(--s6);">
+      <h2 style="font-size:var(--text-base); font-weight:700; margin-bottom:var(--s5);">Game Details</h2>
+      <div style="display:flex; flex-direction:column; gap:var(--s3); margin-bottom:var(--s6); font-size:var(--t-sm);">
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:var(--text-muted);">Provider</span>
+          <span style="font-weight:600;">{{ game.provider.name }}</span>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:var(--text-muted);">Category</span>
+          <span style="font-weight:600;">{{ game.category.name }}</span>
+        </div>
+        {% if game.rtp %}
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:var(--text-muted);">RTP</span>
+          <span style="font-weight:600; color:var(--green);">{{ game.rtp }}%</span>
+        </div>
+        {% endif %}
+        {% if game.min_bet %}
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:var(--text-muted);">Min Bet</span>
+          <span style="font-weight:600;">${{ game.min_bet }}</span>
+        </div>
+        {% endif %}
+        {% if game.max_bet %}
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:var(--text-muted);">Max Bet</span>
+          <span style="font-weight:600;">${{ game.max_bet }}</span>
+        </div>
+        {% endif %}
+      </div>
+      {% if game.status == 'active' %}
+        {% if user.is_authenticated %}
+          <a href="#" class="btn btn--primary" style="width:100%; justify-content:center; margin-bottom:var(--s3);">Play Now</a>
+          {% if game.has_demo %}
+            <a href="#" class="btn btn--ghost" style="width:100%; justify-content:center;">Play Demo</a>
+          {% endif %}
+        {% else %}
+          <a href="{% url 'accounts:register' %}" class="btn btn--primary" style="width:100%; justify-content:center; margin-bottom:var(--s3);">Register to Play</a>
+          <a href="{% url 'accounts:login' %}" class="btn btn--ghost" style="width:100%; justify-content:center;">Sign In</a>
+        {% endif %}
+      {% else %}
+        <div style="text-align:center; padding:var(--s4); background:var(--bg-raised); border-radius:var(--r); color:var(--text-muted); font-size:var(--t-sm);">
+          Game currently unavailable
+        </div>
+      {% endif %}
+      <p style="font-size:var(--t-xs); color:var(--text-muted); text-align:center; margin-top:var(--s4);">
+        Game outcomes use certified RNG. Play responsibly. 18+
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

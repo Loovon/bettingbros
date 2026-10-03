@@ -1,0 +1,40 @@
+﻿{% extends "base/base.html" %}
+{% block title %}{{ category.name }} â€” Casino â€” BetPlatform{% endblock %}
+{% block content %}
+<nav class="casino-nav">
+  <a href="{% url 'casino:home' %}" class="casino-nav-item">ðŸ  Home</a>
+  {% for cat in categories %}
+    <a href="{% url 'casino:category' category_slug=cat.slug %}"
+       class="casino-nav-item {% if cat.id == category.id %}active{% endif %}">
+      {{ cat.icon|default:"ðŸŽ®" }} {{ cat.name }}
+    </a>
+  {% endfor %}
+</nav>
+<div class="container" style="padding-top: var(--s8);">
+  <div class="section-hd" style="margin-bottom: var(--s6);">
+    <h1 class="section-hd__title" style="font-size: var(--t-2xl);">
+      {{ category.icon|default:"ðŸŽ®" }} {{ category.name }}
+    </h1>
+  </div>
+  <div class="games-grid">
+    {% for game in games %}
+      {% include "components/game_card.html" with game=game %}
+    {% empty %}
+      <p style="color:var(--text-muted); grid-column:1/-1; text-align:center; padding:4rem;">
+        No games in this category yet.
+      </p>
+    {% endfor %}
+  </div>
+  <!-- Pagination -->
+  {% if games.has_other_pages %}
+  <div class="pagination">
+    {% if games.has_previous %}<a href="?page={{ games.previous_page_number }}" class="page-btn">â†</a>{% endif %}
+    {% for num in games.paginator.page_range %}
+      <a href="?page={{ num }}" class="page-btn {% if num == games.number %}active{% endif %}">{{ num }}</a>
+    {% endfor %}
+    {% if games.has_next %}<a href="?page={{ games.next_page_number }}" class="page-btn">â†’</a>{% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+

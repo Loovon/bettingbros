@@ -1,0 +1,89 @@
+﻿{% extends "base/base.html" %}
+{% block title %}Promotions — BetPlatform{% endblock %}
+{% block content %}
+<div class="container" style="padding-top:var(--s8);">
+  <h1 style="font-size:var(--t-3xl);font-weight:900;margin-bottom:var(--s2);">Promotions &amp; Offers</h1>
+  <p style="color:var(--text-secondary);margin-bottom:var(--s8);">Terms and conditions apply to all offers. 18+ only.</p>
+  {% if promotions %}
+    <div class="games-grid games-grid--lg">
+      {% for promo in promotions %}
+      <a href="{% url 'promotions:detail' slug=promo.slug %}" class="promo-card">
+        {% if promo.image %}
+          <img src="{{ promo.image.url }}" alt="{{ promo.title }}" class="promo-card__img" loading="lazy" />
+        {% else %}
+          <div class="promo-poster">
+            {% if promo.promotion_type == "welcome_bonus" %}
+            <svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="wbg{{promo.id}}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0d0f16"/><stop offset="100%" stop-color="#1a1f2e"/></linearGradient><linearGradient id="wcg{{promo.id}}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00e676"/><stop offset="100%" stop-color="#00c962"/></linearGradient></defs>
+              <rect width="220" height="160" fill="url(#wbg{{promo.id}})"/>
+              <circle cx="110" cy="75" r="55" fill="url(#wcg{{promo.id}})" opacity=".08"/>
+              <rect x="65" y="78" width="90" height="72" rx="8" fill="#181d28" stroke="#00e676" stroke-width="1.5"/>
+              <rect x="65" y="62" width="90" height="22" rx="6" fill="url(#wcg{{promo.id}})"/>
+              <rect x="98" y="62" width="24" height="88" rx="4" fill="#ffd700" opacity=".85"/>
+              <rect x="65" y="70" width="90" height="12" rx="3" fill="#ffd700" opacity=".6"/>
+              <ellipse cx="91" cy="62" rx="22" ry="14" fill="#ffd700" transform="rotate(-20,91,62)"/>
+              <ellipse cx="129" cy="62" rx="22" ry="14" fill="#ffd700" transform="rotate(20,129,62)"/>
+              <circle cx="110" cy="63" r="9" fill="#ffd700" stroke="#fff" stroke-width="1.5"/>
+              <circle cx="40" cy="48" r="14" fill="#ffd700" stroke="#fff" stroke-width="2" opacity=".9"/>
+              <text x="40" y="53" text-anchor="middle" fill="#000" font-size="12" font-weight="900">$</text>
+              <circle cx="185" cy="38" r="11" fill="#ffd700" opacity=".8" stroke="#fff" stroke-width="1.5"/>
+              <text x="185" y="43" text-anchor="middle" fill="#000" font-size="10" font-weight="900">$</text>
+              <text x="110" y="20" text-anchor="middle" fill="#00e676" font-size="11" font-weight="800">WELCOME BONUS</text>
+              <text x="110" y="150" text-anchor="middle" fill="#ffd700" font-size="22" font-weight="900">100%</text>
+            </svg>
+            {% elif promo.promotion_type == "free_bet" %}
+            <svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+              <rect width="220" height="160" fill="#0d0f16"/>
+              <ellipse cx="110" cy="80" rx="80" ry="60" fill="#448aff" opacity=".07"/>
+              <circle cx="110" cy="68" r="40" fill="#448aff" opacity=".15" stroke="#448aff" stroke-width="2"/>
+              <text x="110" y="80" text-anchor="middle" fill="#448aff" font-size="36">&#127919;</text>
+              <text x="110" y="22" text-anchor="middle" fill="#448aff" font-size="11" font-weight="800">FREE BET</text>
+              <text x="110" y="148" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">No Risk Required</text>
+            </svg>
+            {% elif promo.promotion_type == "casino_bonus" %}
+            <svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+              <rect width="220" height="160" fill="#0d0f16"/>
+              <circle cx="110" cy="75" r="55" fill="#7c3aed" opacity=".12"/>
+              <text x="110" y="90" text-anchor="middle" fill="#b388ff" font-size="50">&#127922;</text>
+              <text x="110" y="22" text-anchor="middle" fill="#b388ff" font-size="11" font-weight="800">CASINO BONUS</text>
+              <text x="55" y="145" fill="#ffd700" font-size="14">&#9733;</text>
+              <text x="95" y="148" fill="#ffd700" font-size="18">&#9733;</text>
+              <text x="130" y="145" fill="#ffd700" font-size="14">&#9733;</text>
+              <text x="165" y="148" fill="#b388ff" font-size="12">&#9733;</text>
+            </svg>
+            {% else %}
+            <svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="pgbg{{promo.id}}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0d0f16"/><stop offset="100%" stop-color="#1a1f2e"/></linearGradient></defs>
+              <rect width="220" height="160" fill="url(#pgbg{{promo.id}})"/>
+              <circle cx="110" cy="72" r="45" fill="#00e676" opacity=".08" stroke="#00e676" stroke-width="1.5"/>
+              <text x="110" y="88" text-anchor="middle" fill="#00e676" font-size="42">&#127873;</text>
+              <text x="110" y="22" text-anchor="middle" fill="#00e676" font-size="10" font-weight="800">{{ promo.get_promotion_type_display|upper }}</text>
+              <text x="110" y="148" text-anchor="middle" fill="#8b95aa" font-size="9">T&amp;Cs Apply &#183; 18+</text>
+            </svg>
+            {% endif %}
+          </div>
+        {% endif %}
+        <div class="promo-card__body">
+          <div class="promo-card__eyebrow">{{ promo.get_promotion_type_display }}</div>
+          <h2 class="promo-card__title">{{ promo.title }}</h2>
+          <p class="promo-card__desc">{{ promo.short_description }}</p>
+          {% if promo.end_date %}
+            <p style="font-size:var(--t-xs);color:var(--text-muted);margin-bottom:var(--s3);">Expires: {{ promo.end_date|date:"d M Y" }}</p>
+          {% endif %}
+          <div class="promo-card__footer">
+            <span class="btn btn--outline btn--sm">View Offer</span>
+            <span class="promo-card__tc">T&amp;Cs apply</span>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div style="text-align:center;padding:6rem;color:var(--text-muted);">
+      <div style="font-size:3rem;margin-bottom:1rem;">🎁</div>
+      <p style="font-weight:700;font-size:var(--t-lg);color:var(--text-primary);margin-bottom:.5rem;">No promotions available right now</p>
+      <p style="font-size:var(--t-sm);">Check back soon for exciting offers.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

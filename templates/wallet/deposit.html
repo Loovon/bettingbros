@@ -1,0 +1,110 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block title %}Deposit Funds — BetPlatform{% endblock %}
+{% block content %}
+<div class="container" style="padding-top:var(--s8);max-width:640px;">
+  <a href="{% url 'wallet:dashboard' %}" style="color:var(--text-muted);font-size:var(--t-sm);display:inline-flex;align-items:center;gap:.5rem;margin-bottom:var(--s6);">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> Back to Wallet
+  </a>
+  <h1 style="font-size:var(--t-2xl);font-weight:900;margin-bottom:var(--s2);">Deposit Funds</h1>
+  <p style="color:var(--text-secondary);margin-bottom:var(--s8);">Secure, encrypted transactions. Minimum deposit varies by provider.</p>
+
+  {% if providers %}
+    <h2 style="font-size:var(--t-sm);font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:var(--s4);">Choose Payment Method</h2>
+    <div style="display:flex;flex-direction:column;gap:var(--s3);margin-bottom:var(--s8);">
+      {% for provider in providers %}
+      <div class="deposit-provider-card" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-xl);padding:var(--s5);display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:border-color 150ms,box-shadow 150ms;"
+           onclick="selectProvider('{{ provider.provider_code }}', '{{ provider.name }}')"
+           onmouseover="this.style.borderColor='var(--green)';this.style.boxShadow='0 0 0 2px rgba(0,230,118,.12)'"
+           onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+        <div style="display:flex;align-items:center;gap:var(--s4);">
+          {% if provider.logo %}
+            <img src="{{ provider.logo.url }}" alt="{{ provider.name }}" style="height:32px;width:auto;object-fit:contain;" />
+          {% else %}
+            <div style="width:48px;height:32px;background:var(--bg-hover);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">
+              {% if "stripe" in provider.provider_code %}&#128179;
+              {% elif "paypal" in provider.provider_code %}&#128180;
+              {% elif "flutter" in provider.provider_code or "mtn" in provider.provider_code or "airtel" in provider.provider_code %}&#128241;
+              {% else %}&#128176;{% endif %}
+            </div>
+          {% endif %}
+          <div>
+            <div style="font-weight:700;font-size:var(--t-sm);">{{ provider.name }}</div>
+            <div style="font-size:var(--t-xs);color:var(--text-muted);">Min: ${{ provider.min_deposit }} &middot; Max: ${{ provider.max_deposit }}</div>
+          </div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted)"><path d="m9 18 6-6-6-6"/></svg>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Deposit form (shown after provider selection) -->
+    <div id="deposit-form" style="display:none;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-xl);padding:var(--s6);">
+      <h3 style="font-size:var(--t-base);font-weight:700;margin-bottom:var(--s5);" id="deposit-form-title">Enter Amount</h3>
+      <form id="deposit-amount-form">
+        <div class="form-group">
+          <label class="form-label">Amount (USD)</label>
+          <div style="display:flex;align-items:center;gap:0;background:var(--bg-input);border:1px solid var(--border-md);border-radius:var(--r);overflow:hidden;transition:border-color 120ms,box-shadow 120ms;" id="deposit-amount-wrap">
+            <span style="padding:0 var(--s3);color:var(--text-muted);font-weight:700;font-size:var(--t-lg);">$</span>
+            <input type="number" id="deposit-amount" min="5" step="1" placeholder="0.00"
+                   style="flex:1;background:none;border:none;outline:none;padding:var(--s3) var(--s3) var(--s3) 0;font-size:var(--t-lg);font-weight:700;color:var(--text-primary);"
+                   onfocus="document.getElementById('deposit-amount-wrap').style.borderColor='var(--green)';document.getElementById('deposit-amount-wrap').style.boxShadow='0 0 0 3px rgba(0,230,118,.1)'"
+                   onblur="document.getElementById('deposit-amount-wrap').style.borderColor='var(--border-md)';document.getElementById('deposit-amount-wrap').style.boxShadow='none'" />
+          </div>
+        </div>
+        <div style="display:flex;gap:var(--s2);margin-bottom:var(--s5);flex-wrap:wrap;">
+          <button type="button" class="btn btn--ghost btn--sm" onclick="document.getElementById('deposit-amount').value='10'">$10</button>
+          <button type="button" class="btn btn--ghost btn--sm" onclick="document.getElementById('deposit-amount').value='25'">$25</button>
+          <button type="button" class="btn btn--ghost btn--sm" onclick="document.getElementById('deposit-amount').value='50'">$50</button>
+          <button type="button" class="btn btn--ghost btn--sm" onclick="document.getElementById('deposit-amount').value='100'">$100</button>
+          <button type="button" class="btn btn--ghost btn--sm" onclick="document.getElementById('deposit-amount').value='200'">$200</button>
+          <button type="button" class="btn btn--ghost btn--sm" onclick="document.getElementById('deposit-amount').value='500'">$500</button>
+        </div>
+        <button type="submit" class="btn btn--primary btn--full btn--lg" id="deposit-submit-btn">
+          Continue to Payment
+        </button>
+        <p style="font-size:var(--t-xs);color:var(--text-muted);text-align:center;margin-top:var(--s3);">
+          &#128274; Secure &amp; encrypted &middot; 18+ only &middot; Deposit limits apply
+        </p>
+      </form>
+    </div>
+  {% else %}
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-xl);padding:var(--s10);text-align:center;">
+      <div style="font-size:2rem;margin-bottom:var(--s4);">&#128295;</div>
+      <p style="font-weight:700;margin-bottom:var(--s2);">Payment methods coming soon</p>
+      <p style="color:var(--text-secondary);font-size:var(--t-sm);">Payment providers are being configured. Contact support for manual deposit.</p>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+  let selectedProvider = null;
+  function selectProvider(code, name) {
+    selectedProvider = code;
+    const form = document.getElementById('deposit-form');
+    const title = document.getElementById('deposit-form-title');
+    form.style.display = 'block';
+    title.textContent = 'Enter Amount — ' + name;
+    form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  document.getElementById('deposit-amount-form')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!selectedProvider) return;
+    const amount = parseFloat(document.getElementById('deposit-amount').value);
+    if (!amount || amount < 1) { alert('Please enter a valid amount.'); return; }
+    const btn = document.getElementById('deposit-submit-btn');
+    btn.textContent = 'Processing...'; btn.disabled = true;
+    try {
+      const r = await fetch('/api/v1/wallet/deposit/initiate/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': document.cookie.split('csrftoken=')[1]?.split(';')[0] || '' },
+        body: JSON.stringify({ provider: selectedProvider, amount: amount, currency: 'USD', callback_url: window.location.origin + '/wallet/' })
+      });
+      const data = await r.json();
+      if (data.redirect_url) { window.location.href = data.redirect_url; }
+      else { alert(data.error || 'Could not initiate payment.'); btn.textContent = 'Continue to Payment'; btn.disabled = false; }
+    } catch { alert('Network error. Please try again.'); btn.textContent = 'Continue to Payment'; btn.disabled = false; }
+  });
+</script>
+{% endblock %}

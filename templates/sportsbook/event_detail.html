@@ -1,0 +1,64 @@
+{% extends "base/base.html" %}
+{% block title %}{{ event }} — BetPlatform{% endblock %}
+{% block content %}
+<div class="sportsbook-layout">
+  <aside class="sports-sidebar">{% include "components/sports_sidebar.html" %}</aside>
+  <div class="sportsbook-main">
+    <div class="event-card" style="margin-bottom:var(--s6);">
+      <div class="event-card__header">
+        <span class="event-card__comp">{{ event.league.sport.name }} — {{ event.league.name }}</span>
+        {% if event.is_live %}
+          <span class="live-badge"><span class="live-dot"></span> LIVE</span>
+        {% else %}
+          <span class="event-card__time">{{ event.starts_at|date:"l j F Y, H:i" }}</span>
+        {% endif %}
+      </div>
+      <div class="event-card__body" style="padding:var(--s6) 0;">
+        <div class="event-card__team">
+          <span class="event-card__team-name" style="font-size:var(--t-2xl);">{{ event.home_team.name }}</span>
+        </div>
+        <div class="event-card__vs">
+          {% if event.is_live and event.home_score is not None %}
+            <span class="score-live" style="font-size:2.5rem;">{{ event.home_score }} - {{ event.away_score }}</span>
+            {% if event.match_time %}<span class="score-time">{{ event.match_time }}'</span>{% endif %}
+          {% else %}
+            <span class="vs-label" style="font-size:var(--t-xl);">VS</span>
+            <span style="font-size:var(--t-sm);color:var(--text-muted);margin-top:4px;">{{ event.starts_at|date:"H:i" }}</span>
+          {% endif %}
+        </div>
+        <div class="event-card__team event-card__team--away">
+          <span class="event-card__team-name" style="font-size:var(--t-2xl);">{{ event.away_team.name }}</span>
+        </div>
+      </div>
+    </div>
+    {% for market in markets %}
+    <div style="margin-bottom:var(--s6);">
+      <div class="section-hd" style="margin-bottom:var(--s3);">
+        <h2 class="section-hd__title">{{ market.name }}</h2>
+        <span class="section-hd__badge">{{ market.odds.all|length }} selections</span>
+      </div>
+      <div class="odds-row {% if market.odds.all|length == 2 %}odds-row--2{% else %}odds-row--3{% endif %}"
+           style="{% if market.odds.all|length > 3 %}grid-template-columns:repeat(auto-fill,minmax(110px,1fr));{% endif %}">
+        {% for odd in market.odds.all %}
+          {% if odd.is_active %}
+          <button class="odd-btn"
+            data-odd-id="{{ odd.id }}"
+            data-event-name="{{ event.home_team.name }} vs {{ event.away_team.name }}"
+            data-market-name="{{ market.name }}"
+            data-selection-name="{{ odd.name }}"
+            data-odds="{{ odd.decimal_odds }}"
+            aria-label="{{ odd.name }} {{ odd.decimal_odds }}">
+            <span class="odd-btn__label">{{ odd.name }}</span>
+            <span class="odd-btn__price">{{ odd.decimal_odds }}</span>
+          </button>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% empty %}
+      <p style="color:var(--text-muted);">No markets available for this event yet.</p>
+    {% endfor %}
+  </div>
+  <aside class="bet-slip-panel">{% include "components/bet_slip.html" %}</aside>
+</div>
+{% endblock %}

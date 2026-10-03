@@ -1,0 +1,23 @@
+{% extends "base/base.html" %}
+{% block title %}Search Casino Games — BetPlatform{% endblock %}
+{% block content %}
+<div class="container" style="padding-top: var(--s8);">
+  <h1 style="font-size:var(--t-2xl); font-weight:800; margin-bottom:var(--s6);">Search Casino Games</h1>
+  <form method="get" style="margin-bottom:var(--s8);">
+    <div style="display:flex; gap:var(--s3);">
+      <input type="text" name="q" value="{{ query }}" class="form-input" placeholder="Game name or provider…" style="max-width:400px;" />
+      <button type="submit" class="btn btn--primary">Search</button>
+    </div>
+  </form>
+  {% if query %}
+    <p style="color:var(--text-muted); margin-bottom:var(--s6);">
+      {% if games %}{{ games|length }} result{{ games|length|pluralize }} for "{{ query }}"{% else %}No results for "{{ query }}"{% endif %}
+    </p>
+  {% endif %}
+  <div class="cards-grid">
+    {% for game in games %}
+      {% include "components/game_card.html" with game=game %}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

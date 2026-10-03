@@ -1,0 +1,69 @@
+{% extends "base/base.html" %}
+{% block title %}{{ promotion.title }} — BetPlatform{% endblock %}
+{% block content %}
+<div class="container" style="padding-top: var(--s8); max-width: 800px;">
+  <a href="{% url 'promotions:list' %}" style="color:var(--text-muted); font-size:var(--t-sm); display:inline-flex; align-items:center; gap:.5rem; margin-bottom:var(--s6);">
+    ← All Promotions
+  </a>
+  {% if promotion.image %}
+    <img src="{{ promotion.image.url }}" alt="{{ promotion.title }}"
+         style="width:100%; max-height:300px; object-fit:cover; border-radius:var(--r-xl); margin-bottom:var(--s6);" />
+  {% endif %}
+  <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r-xl); padding:var(--s8);">
+    <div style="font-size:var(--t-xs); font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); margin-bottom:var(--s3);">
+      {{ promotion.get_promotion_type_display }}
+    </div>
+    <h1 style="font-size:var(--t-3xl); font-weight:800; margin-bottom:var(--s4);">{{ promotion.title }}</h1>
+    <p style="color:var(--text-muted); font-size:var(--t-lg); margin-bottom:var(--s6);">{{ promotion.short_description }}</p>
+
+    {% if promotion.bonus_amount or promotion.min_deposit %}
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:var(--s4); margin-bottom:var(--s6);">
+      {% if promotion.bonus_amount %}
+      <div class="stat-card">
+        <div class="stat-card__label">Bonus Amount</div>
+        <div class="stat-card__value stat-card__value--gold">${{ promotion.bonus_amount }}</div>
+      </div>
+      {% endif %}
+      {% if promotion.min_deposit %}
+      <div class="stat-card">
+        <div class="stat-card__label">Min Deposit</div>
+        <div class="stat-card__value">${{ promotion.min_deposit }}</div>
+      </div>
+      {% endif %}
+      {% if promotion.wagering_requirement %}
+      <div class="stat-card">
+        <div class="stat-card__label">Wagering</div>
+        <div class="stat-card__value">{{ promotion.wagering_requirement }}x</div>
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <div style="margin-bottom:var(--s6);">
+      <h2 style="font-size:var(--t-lg); font-weight:700; margin-bottom:var(--s4);">How it works</h2>
+      <div style="color:var(--text-muted); line-height:1.8;">{{ promotion.description|linebreaks }}</div>
+    </div>
+
+    {% if user.is_authenticated %}
+      <a href="{% url 'wallet:deposit' %}" class="btn btn--primary btn--lg">Claim Offer</a>
+    {% else %}
+      <a href="{% url 'accounts:register' %}" class="btn btn--primary btn--lg" style="margin-right:var(--s3);">Register & Claim</a>
+      <a href="{% url 'accounts:login' %}" class="btn btn--ghost btn--lg">Sign In</a>
+    {% endif %}
+
+    <!-- Mandatory T&Cs disclosure -->
+    <div style="margin-top:var(--s8); padding-top:var(--s6); border-top:1px solid var(--border);">
+      <h3 style="font-size:var(--t-sm); font-weight:700; margin-bottom:var(--s3); color:var(--text-muted);">
+        Terms & Conditions
+      </h3>
+      <div style="font-size:var(--t-xs); color:var(--text-muted); line-height:1.8;">
+        {{ promotion.terms_and_conditions|linebreaks }}
+      </div>
+      <p style="font-size:var(--t-xs); color:var(--text-muted); margin-top:var(--s3);">
+        Valid: {{ promotion.start_date|date:"d M Y" }}{% if promotion.end_date %} – {{ promotion.end_date|date:"d M Y" }}{% endif %}.
+        18+ only. Please gamble responsibly.
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

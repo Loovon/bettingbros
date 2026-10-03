@@ -1,0 +1,28 @@
+{% extends "base/base.html" %}
+{% block title %}Sign In — BetPlatform{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-card__brand">BetPlatform</div>
+    <h1 class="auth-card__title">Welcome back</h1>
+    <p class="auth-card__sub">Sign in to continue betting</p>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <div class="form-group">
+        <label class="form-label" for="id_username">Username</label>
+        <input type="text" name="username" id="id_username" class="form-input"
+               placeholder="Your username" autocomplete="username" required />
+        {% if form.username.errors %}<p class="form-error">{{ form.username.errors|join:" " }}</p>{% endif %}
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="id_password">Password</label>
+        <input type="password" name="password" id="id_password" class="form-input"
+               placeholder="Your password" autocomplete="current-password" required />
+        {% if form.password.errors %}<p class="form-error">{{ form.password.errors|join:" " }}</p>{% endif %}
+      </div>
+      <button type="submit" class="btn btn--primary btn--full btn--lg" style="margin-top:var(--s4);">Sign In</button>
+    </form>
+    <div class="auth-card__foot">Don't have an account? <a href="{% url 'accounts:register' %}">Register</a></div>
+  </div>
+</div>
+{% endblock %}

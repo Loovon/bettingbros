@@ -1,0 +1,83 @@
+﻿{% comment %}Bet Slip v4 - scrollable, editable, collapsible{% endcomment %}
+<div class="slip-panel-inner">
+
+  <!-- ════ COLLAPSED: 44px slim tab ════ -->
+  <div class="slip-collapsed-view" id="slip-collapsed-view">
+    <button class="slip-expand-btn" id="slip-expand-btn" title="Expand bet slip" aria-label="Expand">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <div class="slip-collapsed-label">BET<br/>SLIP</div>
+    <div class="slip-collapsed-count js-slip-count">0</div>
+  </div>
+
+  <!-- ════ EXPANDED: full interactive panel ════ -->
+  <div class="slip-expanded-view" id="slip-expanded-view">
+
+    <div class="slip-hd">
+      <span class="slip-hd__title">&#127919; Bet Slip</span>
+      <span class="slip-hd__count js-slip-count">0</span>
+      <button class="slip-hd__clear" id="slip-clear-btn" aria-label="Clear all">Clear</button>
+      <button class="slip-hd__minimize" id="slip-collapse-btn" aria-expanded="true" aria-label="Minimize">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
+
+    <div class="slip-tabs" role="tablist">
+      <button class="slip-tab active" id="tab-singles" role="tab" aria-selected="true">Singles</button>
+      <button class="slip-tab" id="tab-multi"   role="tab" aria-selected="false">Acca</button>
+      <button class="slip-tab" id="tab-history" role="tab" aria-selected="false">My Bets</button>
+    </div>
+
+    <!-- Empty state -->
+    <div class="slip-empty" id="slip-empty">
+      <div class="slip-empty__icon">&#127919;</div>
+      <p class="slip-empty__title">Your slip is empty</p>
+      <p class="slip-empty__sub">Click any odds button to add a selection</p>
+    </div>
+
+    <!-- ── Selections list (scrollable) ── -->
+    <div class="slip-selections" id="slip-selections" style="display:none;"></div>
+
+    <!-- ── Accumulator summary ── -->
+    <div class="acca-summary" id="acca-summary" style="display:none;">
+      <div class="acca-row">
+        <span class="acca-label">Selections</span>
+        <span class="acca-val" id="acca-count">0</span>
+      </div>
+      <div class="acca-row">
+        <span class="acca-label">Combined Odds</span>
+        <span class="acca-val acca-val--odds" id="acca-total-odds">&#8212;</span>
+      </div>
+      <div class="acca-stake-row">
+        <span class="acca-currency">$</span>
+        <input class="slip-stake-input" type="number" id="acca-stake-input"
+               min="0.01" step="1" placeholder="0.00" aria-label="Stake" />
+      </div>
+      <div class="acca-row acca-row--return">
+        <span class="acca-label">Potential Return</span>
+        <span class="acca-val acca-val--return" id="acca-total-return">&#8212;</span>
+      </div>
+    </div>
+
+    <!-- ── History ── -->
+    <div class="slip-history" id="slip-history" style="display:none;"></div>
+    <div id="slip-history-skeleton" style="display:none;padding:10px;">
+      <div class="skeleton" style="height:54px;margin-bottom:8px;border-radius:8px;"></div>
+      <div class="skeleton" style="height:54px;margin-bottom:8px;border-radius:8px;"></div>
+      <div class="skeleton" style="height:54px;border-radius:8px;"></div>
+    </div>
+
+    <!-- ── Footer ── -->
+    <div class="slip-footer" id="slip-footer" style="display:none;">
+      <div class="slip-footer__summary" id="slip-footer-summary"></div>
+      {% if user.is_authenticated %}
+        <button class="slip-place-btn" id="slip-place-btn" type="button">Place Bet</button>
+      {% else %}
+        <div class="slip-auth-prompt">
+          <a href="{% url 'accounts:login' %}">Sign in</a>&nbsp;or&nbsp;<a href="{% url 'accounts:register' %}">Register</a>&nbsp;to place bets
+        </div>
+      {% endif %}
+    </div>
+
+  </div><!-- /slip-expanded-view -->
+</div><!-- /slip-panel-inner -->

@@ -1,0 +1,31 @@
+{% extends "base/base.html" %}
+{% block title %}{{ sport.name }} — BetPlatform{% endblock %}
+{% block content %}
+<div class="sportsbook-layout">
+  <aside class="sports-sidebar">{% include "components/sports_sidebar.html" %}</aside>
+  <div class="sportsbook-main">
+    <div class="section-hd" style="margin-bottom:var(--s6);">
+      <h1 class="section-hd__title" style="font-size:var(--t-2xl);">
+        {{ sport.icon|default:"⚽" }} {{ sport.name }}
+      </h1>
+    </div>
+    {% for event in events %}
+      {% include "components/event_card.html" with event=event %}
+    {% empty %}
+      <div style="text-align:center;padding:4rem;color:var(--text-muted);">
+        <p>No {{ sport.name }} events available right now.</p>
+      </div>
+    {% endfor %}
+    {% if events.has_other_pages %}
+    <div class="pagination">
+      {% if events.has_previous %}<a href="?page={{ events.previous_page_number }}" class="page-btn">←</a>{% endif %}
+      {% for num in events.paginator.page_range %}
+        <a href="?page={{ num }}" class="page-btn {% if num == events.number %}active{% endif %}">{{ num }}</a>
+      {% endfor %}
+      {% if events.has_next %}<a href="?page={{ events.next_page_number }}" class="page-btn">→</a>{% endif %}
+    </div>
+    {% endif %}
+  </div>
+  <aside class="bet-slip-panel">{% include "components/bet_slip.html" %}</aside>
+</div>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends "base/base.html" %}
+{% load humanize %}
+{% block title %}My Profile — BetPlatform{% endblock %}
+{% block content %}
+<div class="container" style="padding-top:var(--s8);max-width:860px;">
+
+  <!-- Header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--s8);flex-wrap:wrap;gap:var(--s4);">
+    <h1 style="font-size:var(--t-3xl);font-weight:900;">My Profile</h1>
+    <a href="{% url 'accounts:profile_edit' %}" class="btn btn--ghost">Edit Profile</a>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--s6);">
+
+    <!-- Personal info card -->
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-xl);padding:var(--s6);">
+      <h2 style="font-size:var(--t-lg);font-weight:700;margin-bottom:var(--s5);">Personal Information</h2>
+
+      <!-- Avatar / initials -->
+      <div style="margin-bottom:var(--s5);">
+        {% if user.avatar %}
+          <img src="{{ user.avatar.url }}" alt="Avatar"
+               style="width:72px;height:72px;border-radius:50%;object-fit:cover;border:2px solid var(--border);" />
+        {% else %}
+          <div style="width:72px;height:72px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:var(--t-2xl);font-weight:900;color:#000;">
+            {{ user.username|slice:":1"|upper }}
+          </div>
+        {% endif %}
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:var(--s4);font-size:var(--t-sm);">
+        <div>
+          <div style="color:var(--text-muted);font-size:var(--t-xs);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px;">Username</div>
+          <strong>{{ user.username }}</strong>
+        </div>
+        <div>
+          <div style="color:var(--text-muted);font-size:var(--t-xs);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px;">Email</div>
+          <strong>{{ user.email }}</strong>
+        </div>
+        <div>
+          <div style="color:var(--text-muted);font-size:var(--t-xs);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px;">Full Name</div>
+          <strong>{{ user.full_name|default:"—" }}</strong>
+        </div>
+        <div>
+          <div style="color:var(--text-muted);font-size:var(--t-xs);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px;">Member Since</div>
+          <strong>{{ user.date_joined|date:"d M Y" }}</strong>
+        </div>
+        <div>
+          <div style="color:var(--text-muted);font-size:var(--t-xs);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Account Status</div>
+          <span class="badge badge--{% if user.account_status == 'active' %}green{% else %}red{% endif %}">
+            {{ user.get_account_status_display }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick action cards -->
+    <div style="display:flex;flex-direction:column;gap:var(--s3);">
+
+      <a href="{% url 'wallet:dashboard' %}"
+         style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-xl);padding:var(--s5);display:flex;align-items:center;justify-content:space-between;transition:border-color 150ms,box-shadow 150ms;"
+         onmouseover="this.style.borderColor='var(--green)';this.style.boxShadow='0 0 0 2px rgba(0,230,118,.1)'"
+         onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+        <div>
+          <div style="font-weight:700;margin-bottom:3px;">&#128176; My Wallet</div>
+          {% if user.wallet %}
+            <div style="font-size:var(--t-xs);color:var(--text-muted);">Balance: <strong style="color:var(--green);">{{ user.wallet.currency }} {{ user.wallet.balance|floatformat:2 }}</strong></div>
+          {% else %}
+            <div style="font-size:var(--t-xs);color:var(--text-muted);">Deposits, withdrawals &amp; balance</div>
+          {% endif %}
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted);flex-shrink:0;"><path d="m9 18 6-6-6-6"/></svg>
+      </a>
+
+      <a href="{% url 'bets:history' %}"
+         style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-xl);padding:var(--s5);display:flex;align-items:center;justify-content:space-between;transition:border-color 150ms,box-shadow 150ms;"
+         onmouseover="this.style.borderColor='var(--green)';this.style.boxShadow='0 0 0 2px rgba(0,230,118,.1)'"
+         onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+        <div>
+          <div style="font-weight:700;margin-bottom:3px;">&#127919; My Bets</div>
+          <div style="font-size:var(--t-xs);color:var(--text-muted);">Bet history &amp; open bets</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted);flex-shrink:0;"><path d="m9 18 6-6-6-6"/></svg>
+      </a>
+
+      <a href="{% url 'accounts:responsible_gambling' %}"
+         style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-xl);padding:var(--s5);display:flex;align-items:center;justify-content:space-between;transition:border-color 150ms,box-shadow 150ms;"
+         onmouseover="this.style.borderColor='var(--green)';this.style.boxShadow='0 0 0 2px rgba(0,230,118,.1)'"
+         onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+        <div>
+          <div style="font-weight:700;margin-bottom:3px;">&#128737; Responsible Gambling</div>
+          <div style="font-size:var(--t-xs);color:var(--text-muted);">Set limits, self-exclusion</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted);flex-shrink:0;"><path d="m9 18 6-6-6-6"/></svg>
+      </a>
+
+      <a href="{% url 'accounts:password_change' %}"
+         style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-xl);padding:var(--s5);display:flex;align-items:center;justify-content:space-between;transition:border-color 150ms,box-shadow 150ms;"
+         onmouseover="this.style.borderColor='var(--border-md)';this.style.boxShadow='none'"
+         onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+        <div>
+          <div style="font-weight:700;margin-bottom:3px;">&#128274; Change Password</div>
+          <div style="font-size:var(--t-xs);color:var(--text-muted);">Update your login credentials</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted);flex-shrink:0;"><path d="m9 18 6-6-6-6"/></svg>
+      </a>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

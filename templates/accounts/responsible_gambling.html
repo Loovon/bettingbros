@@ -1,0 +1,65 @@
+{% extends "base/base.html" %}
+{% block title %}Responsible Gambling — BetPlatform{% endblock %}
+{% block content %}
+<div class="container" style="padding-top: var(--s8); max-width: 700px;">
+  <h1 style="font-size:var(--t-3xl); font-weight:800; margin-bottom:var(--s2);">🛡️ Responsible Gambling</h1>
+  <p style="color:var(--text-muted); margin-bottom:var(--s8);">
+    We are committed to responsible gambling. Use these tools to stay in control.
+  </p>
+
+  <!-- Current limits -->
+  <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r-xl); padding:var(--s6); margin-bottom:var(--s6);">
+    <h2 style="font-size:var(--t-lg); font-weight:700; margin-bottom:var(--s5);">Your Current Limits</h2>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:var(--s4); font-size:var(--t-sm);">
+      <div><span style="color:var(--text-muted);">Daily deposit limit</span><br />
+        <strong>{{ rg.daily_deposit_limit|default:"Not set" }}</strong></div>
+      <div><span style="color:var(--text-muted);">Weekly deposit limit</span><br />
+        <strong>{{ rg.weekly_deposit_limit|default:"Not set" }}</strong></div>
+      <div><span style="color:var(--text-muted);">Monthly deposit limit</span><br />
+        <strong>{{ rg.monthly_deposit_limit|default:"Not set" }}</strong></div>
+      <div><span style="color:var(--text-muted);">Session time limit</span><br />
+        <strong>{% if rg.session_time_limit_minutes %}{{ rg.session_time_limit_minutes }} minutes{% else %}Not set{% endif %}</strong></div>
+    </div>
+    {% if rg.self_excluded %}
+    <div style="margin-top:var(--s4); padding:var(--s4); background:rgba(229,57,53,.1); border-radius:var(--r); border:1px solid rgba(229,57,53,.3);">
+      <span style="color:var(--red); font-weight:700;">⚠️ Self-exclusion is active</span>
+      {% if rg.self_exclusion_end_date %}
+        <p style="font-size:var(--t-xs); color:var(--text-muted); margin-top:4px;">Until {{ rg.self_exclusion_end_date|date:"d M Y" }}</p>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Info cards -->
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:var(--s4); margin-bottom:var(--s6);">
+    <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r-xl); padding:var(--s5);">
+      <div style="font-size:1.5rem; margin-bottom:var(--s3);">📊</div>
+      <h3 style="font-size:var(--text-base); font-weight:700; margin-bottom:var(--s2);">Deposit Limits</h3>
+      <p style="font-size:var(--t-xs); color:var(--text-muted);">Set daily, weekly or monthly deposit limits to manage your spending.</p>
+    </div>
+    <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r-xl); padding:var(--s5);">
+      <div style="font-size:1.5rem; margin-bottom:var(--s3);">⏱️</div>
+      <h3 style="font-size:var(--text-base); font-weight:700; margin-bottom:var(--s2);">Time Limits</h3>
+      <p style="font-size:var(--t-xs); color:var(--text-muted);">Limit how long you can play in a single session.</p>
+    </div>
+    <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r-xl); padding:var(--s5);">
+      <div style="font-size:1.5rem; margin-bottom:var(--s3);">❄️</div>
+      <h3 style="font-size:var(--text-base); font-weight:700; margin-bottom:var(--s2);">Cool-Off Period</h3>
+      <p style="font-size:var(--t-xs); color:var(--text-muted);">Take a short break for 24 hours, 7 days, or 30 days.</p>
+    </div>
+    <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r-xl); padding:var(--s5);">
+      <div style="font-size:1.5rem; margin-bottom:var(--s3);">🚫</div>
+      <h3 style="font-size:var(--text-base); font-weight:700; margin-bottom:var(--s2);">Self-Exclusion</h3>
+      <p style="font-size:var(--t-xs); color:var(--text-muted);">Permanently block yourself from gambling for a chosen period.</p>
+    </div>
+  </div>
+
+  <div style="padding:var(--s5); background:rgba(0,200,83,.08); border:1px solid rgba(0,200,83,.2); border-radius:var(--r-lg);">
+    <p style="font-size:var(--t-sm); color:var(--text-muted);">
+      For immediate help, contact <strong style="color:var(--text-primary);">BeGambleAware.org</strong> or call the
+      <strong style="color:var(--text-primary);">National Problem Gambling Helpline</strong>.
+      To update your limits, contact our support team.
+    </p>
+  </div>
+</div>
+{% endblock %}

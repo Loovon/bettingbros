@@ -1,0 +1,61 @@
+{% extends "base/base.html" %}
+{% block title %}Bet History — BetPlatform{% endblock %}
+{% block content %}
+<div class="container" style="padding-top:var(--s8);">
+  <div style="display:flex;align-items:center;gap:var(--s4);margin-bottom:var(--s8);flex-wrap:wrap;">
+    <h1 style="font-size:var(--t-3xl);font-weight:900;">My Bets</h1>
+    <a href="{% url 'bets:open' %}" class="btn btn--ghost">Open Bets</a>
+    <a href="{% url 'bets:history' %}" class="btn btn--ghost" style="color:var(--green);border-color:var(--green);">All Bets</a>
+  </div>
+  {% for bet in bets %}
+  <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-xl);padding:var(--s5);margin-bottom:var(--s4);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--s4);flex-wrap:wrap;gap:var(--s2);">
+      <div style="display:flex;align-items:center;gap:var(--s3);">
+        <span class="badge badge--{% if bet.status == 'won' %}green{% elif bet.status == 'lost' %}red{% elif bet.status == 'open' %}blue{% else %}gray{% endif %}">{{ bet.get_status_display }}</span>
+        <span style="font-size:var(--t-xs);color:var(--text-muted);">{{ bet.bet_type|capfirst }} &middot; {{ bet.placed_at|date:"d M Y H:i" }}</span>
+      </div>
+      <div style="text-align:right;font-size:var(--t-sm);">
+        <span style="color:var(--text-muted);">Stake: </span><strong>${{ bet.stake }}</strong>
+        &nbsp;&middot;&nbsp;
+        <span style="color:var(--text-muted);">Odds: </span><strong style="color:var(--gold);">{{ bet.total_odds }}</strong>
+        &nbsp;&middot;&nbsp;
+        {% if bet.status == 'won' %}
+          <span style="color:var(--text-muted);">Won: </span><strong style="color:var(--green);">${{ bet.actual_return }}</strong>
+        {% else %}
+          <span style="color:var(--text-muted);">Return: </span><strong>${{ bet.potential_return }}</strong>
+        {% endif %}
+      </div>
+    </div>
+    {% for sel in bet.selections.all %}
+    <div style="display:flex;justify-content:space-between;align-items:center;font-size:var(--t-sm);padding:var(--s2) 0;border-top:1px solid var(--border);">
+      <div>
+        <div style="color:var(--text-muted);font-size:var(--t-xs);">{{ sel.event_name }}</div>
+        <div style="font-weight:600;">{{ sel.selection_name }}</div>
+        <div style="font-size:var(--t-xs);color:var(--text-muted);">{{ sel.market_name }}</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-weight:700;color:var(--green);">{{ sel.odds_at_placement }}</div>
+        <span class="badge badge--{% if sel.result == 'won' %}green{% elif sel.result == 'lost' %}red{% elif sel.result == 'void' %}gray{% else %}blue{% endif %}" style="margin-top:4px;">{{ sel.get_result_display }}</span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% empty %}
+    <div style="text-align:center;padding:var(--s16);color:var(--text-muted);">
+      <div style="font-size:3rem;margin-bottom:var(--s4);">&#127919;</div>
+      <p style="font-weight:700;font-size:var(--t-lg);color:var(--text-primary);margin-bottom:var(--s2);">No bets placed yet</p>
+      <p style="margin-bottom:var(--s6);">Place your first bet on the sportsbook.</p>
+      <a href="/" class="btn btn--primary btn--lg">Browse Events</a>
+    </div>
+  {% endfor %}
+  {% if bets.has_other_pages %}
+  <div class="pagination">
+    {% if bets.has_previous %}<a href="?page={{ bets.previous_page_number }}" class="page-btn">Previous</a>{% endif %}
+    {% for num in bets.paginator.page_range %}
+      <a href="?page={{ num }}" class="page-btn {% if num == bets.number %}active{% endif %}">{{ num }}</a>
+    {% endfor %}
+    {% if bets.has_next %}<a href="?page={{ bets.next_page_number }}" class="page-btn">Next</a>{% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base/base.html" %}
+{% block title %}Edit Profile — BetPlatform{% endblock %}
+{% block content %}
+<div class="container" style="padding-top: var(--s8); max-width: 600px;">
+  <a href="{% url 'accounts:profile' %}" style="color:var(--text-muted); font-size:var(--t-sm); display:inline-flex; align-items:center; gap:.5rem; margin-bottom:var(--s6);">← My Profile</a>
+  <h1 style="font-size:var(--t-2xl); font-weight:800; margin-bottom:var(--s8);">Edit Profile</h1>
+  <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r-xl); padding:var(--s8);">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="form-group">
+          <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<p class="form-error">{{ field.errors|join:" " }}</p>{% endif %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn--primary btn--lg" style="width:100%;">Save Changes</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base/base.html" %}
+{% block title %}Live Betting — BetPlatform{% endblock %}
+{% block content %}
+<div class="sportsbook-layout">
+  <aside class="sports-sidebar">{% include "components/sports_sidebar.html" %}</aside>
+  <div class="sportsbook-main">
+    <div class="section-hd" style="margin-bottom:var(--s6);">
+      <h1 class="section-hd__title" style="font-size:var(--t-2xl);">
+        <span class="live-dot"></span> Live Betting
+        <span class="section-hd__badge section-hd__badge--live">{{ events|length }}</span>
+      </h1>
+    </div>
+    {% for event in events %}
+      {% include "components/event_card.html" with event=event show_score=True %}
+    {% empty %}
+      <div style="text-align:center;padding:4rem;color:var(--text-muted);">
+        <div style="font-size:3rem;margin-bottom:1rem;">📡</div>
+        <p style="font-weight:700;font-size:var(--t-lg);color:var(--text-primary);">No live events right now</p>
+        <p style="margin-top:8px;font-size:var(--t-sm);">Live events appear here as they start.</p>
+      </div>
+    {% endfor %}
+  </div>
+  <aside class="bet-slip-panel">{% include "components/bet_slip.html" %}</aside>
+</div>
+{% endblock %}
